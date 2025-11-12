@@ -1,18 +1,24 @@
 import dotenv
 import os
-from utils.utils import VibeThinker
-
+import uvicorn
+from fastapi import FastAPI
+from routers import chatbot
 
 try:
-    os.getcwd()
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
     print('Error|dotenv module not found. Please install it using "pip install python-dotenv".')
 
-model_path = "WeiboAI/VibeThinker-1.5B"
-model = VibeThinker(model_path)
+app = FastAPI(
+    title="VibeThinker API",
+    description="API para interactuar con el modelo VibeThinker.",
+    version="1.0.0"
+)
+
+app.include_router(chatbot.router)
 
 if __name__ == '__main__':
-    prompt = 'Hello i am Mateo. What is my name?'
-    print(model.infer_text(prompt))
+    host = os.getenv("HOST", "127.0.0.1")
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run(app, host=host, port=port)

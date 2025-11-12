@@ -26,7 +26,7 @@ class VibeThinker:
         model_inputs = self.tokenizer([text], return_tensors="pt").to(self.model.device)
 
         generation_config = dict(
-            max_new_tokens=100,
+            max_new_tokens=250,
             do_sample=True,
             temperature=0.6, # 0.6 or 1.0, you can set it according to your needs
             top_p=0.95,
