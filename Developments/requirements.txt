@@ -1,0 +1,7 @@
+transformers
+fastapi
+uvicorn
+python-dotenv
+pydantic
+requests
+accelerate

@@ -1,0 +1,26 @@
+Celonis Product DocumentationPQL - Process Query LanguagePQL Function Library
+PQL Function Library
+Description
+PQL provides a wide variety of functions and operators that can be used within a query.
+
+This sections contains all available functions and operators. In contrast to operators, functions obey a strict syntax of listing function parameters - especially the more complex ones like CASE WHEN.
+
+Deprecated Operators
+You might find that some of your favorite operators have an annotation that marks them as being deprecated. This means there is a new operator that can be used for solving the same problem. The new operator probably supports more functionality, can be more performant or easier to use. If an operator is marked as deprecated, we recommend to use the new operator, which should be linked in the documentation. There will be no new features added to the deprecated operator, only to the replacement. As long as it is not marked with a removal date, we do not plan to remove the operator any time soon, so you don't have to migrate to the replacement.
+
+Operator Precedence
+If an expression contains more than one operator, the operators are evaluated in order of operator precedence. To influence the evaluation order you can use parentheses which have the highest operator precedence and are evaluated first. Operators with the same operator precedence are evaluated from left to right.
+
+Expressions
+Precedence	Operator	Operation
+Highest	()	parentheses
++, -	unary positive and negative operator
+*, /, %	multiplication, division, modulo
++, -	addition, subtraction
+||	concatenation
+Lowest	=, !=, <, ≤, >, ≥	equal, not equal, less than, less than or equal, greater than, greater than or equal
+Logical Expressions
+Precedence	Operator	Operation
+Highest	(), NOT()	parentheses, parentheses with logical negation
+AND	conjunction
+Lowest	OR	disjunction
