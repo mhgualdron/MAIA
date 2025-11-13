@@ -1,9 +1,9 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+from transformers import AutoModelForCausalLM, AutoModelForQuestionAnswering, AutoTokenizer, GenerationConfig
 
 class VibeThinker:
     def __init__(self, model_path):
         self.model_path = model_path
-        self.model = AutoModelForCausalLM.from_pretrained(
+        self.model = AutoModelForQuestionAnswering.from_pretrained(
             model_path,
             low_cpu_mem_usage=True,
             torch_dtype="bfloat16",
