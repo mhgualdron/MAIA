@@ -1,9 +1,9 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+from transformers import AutoModelForCausalLM, AutoModelForQuestionAnswering, AutoTokenizer, GenerationConfig
 
 class VibeThinker:
     def __init__(self, model_path):
         self.model_path = model_path
-        self.model = AutoModelForCausalLM.from_pretrained(
+        self.model = AutoModelForQuestionAnswering.from_pretrained(
             model_path,
             low_cpu_mem_usage=True,
             torch_dtype="bfloat16",
@@ -26,7 +26,7 @@ class VibeThinker:
         model_inputs = self.tokenizer([text], return_tensors="pt").to(self.model.device)
 
         generation_config = dict(
-            max_new_tokens=100,
+            max_new_tokens=250,
             do_sample=True,
             temperature=0.6, # 0.6 or 1.0, you can set it according to your needs
             top_p=0.95,
