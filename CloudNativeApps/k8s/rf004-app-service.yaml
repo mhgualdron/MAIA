@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rf004-app-service
+spec:
+  selector:
+    app: rf004-app
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30005 # Using a free port for local access if needed
+  type: NodePort

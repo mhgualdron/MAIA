@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-cards-app
+  labels:
+    app: credit-cards-app
+    tier: backend
+    team: grupo12
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: credit-cards-app
+  template:
+    metadata:
+      labels:
+        app: credit-cards-app
+        tier: backend
+    spec:
+      containers:
+        - name: credit-cards-app
+          image: 146691323147.dkr.ecr.us-east-1.amazonaws.com/credit-cards-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: "AWS_ACCESS_KEY_ID_PLACEHOLDER"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "AWS_SECRET_KEY_PLACEHOLDER"
+            - name: AWS_SESSION_TOKEN
+              value: "AWS_SESSION_TOKEN_PLACEHOLDER"
+            - name: DB_URI
+              value: "postgresql://postgres:dann_grupo12_2026!@dann-db.cxacss8c64jf.us-east-1.rds.amazonaws.com:5432/dann_db"
+            - name: TRUENATIVE_HOST
+              value: "http://truenative-service.default.svc.cluster.local"
+            - name: TRUENATIVE_SECRET
+              value: "random_secret_token"
+            - name: USERS_APP_HOST
+              value: "http://users-app-service.default.svc.cluster.local:80"
+            - name: SQS_QUEUE_URL
+              value: "https://sqs.us-east-1.amazonaws.com/146691323147/dann-credit-cards-queue"
+            - name: AWS_REGION
+              value: "us-east-1"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"

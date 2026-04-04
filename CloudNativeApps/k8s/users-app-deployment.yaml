@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-app
+  labels:
+    app: users-app
+    tier: backend
+    team: grupo12
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-app
+  template:
+    metadata:
+      labels:
+        app: users-app
+        tier: backend
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: users-app
+        image: 146691323147.dkr.ecr.us-east-1.amazonaws.com/users-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /users/ping
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /users/ping
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        env:
+        - name: DB_HOST
+          value: "dann-db.cxacss8c64jf.us-east-1.rds.amazonaws.com"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "dann_db"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASSWORD
+          value: "dann_grupo12_2026!"
+        - name: USER_EVENTS_TOPIC_ARN
+          value: "arn:aws:sns:us-east-1:146691323147:dann-grupo12-user-events"
+
+        - name: AWS_REGION
+          value: "us-east-1"
+        - name: SECRET_TOKEN
+          value: "random_secret_token"
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_SESSION_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: AWS_SESSION_TOKEN
+
+
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

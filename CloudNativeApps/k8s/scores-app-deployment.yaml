@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: score-app
+  labels:
+    app: score-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: score-app
+  template:
+    metadata:
+      labels:
+        app: score-app
+    spec:
+      containers:
+        - name: scores-app
+          image: 146691323147.dkr.ecr.us-east-1.amazonaws.com/scores-app:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://postgres:dann_grupo12_2026!@dann-db.cxacss8c64jf.us-east-1.rds.amazonaws.com:5432/dann_db"
+            - name: DB_HOST
+              value: "dann-db.cxacss8c64jf.us-east-1.rds.amazonaws.com"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "dann_grupo12_2026!"
+            - name: DB_NAME
+              value: "dann_db"
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5

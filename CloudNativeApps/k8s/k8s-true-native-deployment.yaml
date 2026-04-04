@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: truenative
+  labels:
+    app: truenative
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: truenative
+  template:
+    metadata:
+      labels:
+        app: truenative
+    spec:
+      containers:
+      - name: truenative
+        image: ghcr.io/misw-4301-desarrollo-apps-en-la-nube/true-native:2.0.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SECRET_TOKEN
+          value: "random_secret_token"
+        - name: MAX_WEBHOOK_DELAY
+          value: "10"
+        - name: MAX_POLL_DELAY
+          value: "5"
+        - name: SUCCESS_RATE
+          value: "80"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: truenative-service
+spec:
+  selector:
+    app: truenative
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP

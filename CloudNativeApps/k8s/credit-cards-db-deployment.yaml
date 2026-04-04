@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-cards-db
+  labels:
+    app: credit-cards-db
+    tier: database
+    team: grupo12
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: credit-cards-db
+  template:
+    metadata:
+      labels:
+        app: credit-cards-db
+        tier: database
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: credit_cards_db
+        - name: POSTGRES_USER
+          value: admin
+        - name: POSTGRES_PASSWORD
+          value: admin
+        volumeMounts:
+        - name: credit-cards-db-storage
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+      volumes:
+      - name: credit-cards-db-storage
+        emptyDir: {}

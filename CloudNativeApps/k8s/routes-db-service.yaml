@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: routes-db-service
+  namespace: default
+spec:
+  selector:
+    app: routes-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP

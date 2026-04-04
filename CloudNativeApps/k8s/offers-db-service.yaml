@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: offers-db-service
+  labels:
+    app: offers-db
+    tier: database
+    team: grupo12
+spec:
+  type: ClusterIP
+  selector:
+    app: offers-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP

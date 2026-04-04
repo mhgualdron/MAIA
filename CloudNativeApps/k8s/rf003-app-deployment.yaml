@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rf003-app
+  labels:
+    app: rf003-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rf003-app
+  template:
+    metadata:
+      labels:
+        app: rf003-app
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+        - name: rf003-app
+          image: 146691323147.dkr.ecr.us-east-1.amazonaws.com/rf003-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /rf003/ping
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: USERS_SERVICE_URL
+              value: "http://users-app-service:80"
+            - name: POSTS_SERVICE_URL
+              value: "http://posts-app-service:80"
+            - name: ROUTES_SERVICE_URL
+              value: "http://routes-app-service:80"

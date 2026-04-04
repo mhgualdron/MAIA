@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: credit-cards-app-service
+spec:
+  selector:
+    app: credit-cards-app
+  ports:
+  - port: 80
+    targetPort: 80

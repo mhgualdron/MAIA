@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: scores-network
+  labels:
+    team: grupo12
+spec:
+  podSelector:
+    matchLabels:
+      app: scores-db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: score-app
+      ports:
+        - protocol: TCP
+          port: 5432

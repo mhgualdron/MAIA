@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: users-network
+spec:
+  podSelector:
+    matchLabels:
+      app: users-db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: users-app
+    ports:
+    - protocol: TCP
+      port: 5432
