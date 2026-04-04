@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "posts_app"
+version = "1.0.0"
+description = "Proyecto guía para talleres y ejemplos."
+authors = ["Juan Marin <jd.marinb1@uniandes.edu.co>"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.12"
+uvicorn = "^0.27.1"
+python-dotenv = "^1.0.1"
+pydantic-settings = "^2.1.0"
+sqlalchemy = "^2.0.46"
+psycopg2-binary = "^2.9.11"
+pydantic = "^2.12.5"
+asyncpg = "^0.31.0"
+aiosqlite = "^0.22.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+ruff = "^0.11.12"
+bandit = "^1.8.3"
+pytest = "^8.4.0"
+pytest-asyncio = "^0.23.5"
+pytest-cov = "^6.1.1"
+httpx = "^0.28.1"
+faker = "^37.3.0"
+aiosqlite = "^0.22.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+fix = true
+src = ["app"]
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
+pythonpath = "app"
+testpaths = ["tests"]
