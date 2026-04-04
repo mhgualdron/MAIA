@@ -1,0 +1,86 @@
+team:
+  name: "Grupo 12 - DANN Project"
+  members:
+    - user: m.hernandezg234@uniandes.edu.co
+      percentage: 25
+    - user: ma.quinteror1@uniandes.edu.co
+      percentage: 25
+    - user: j.buriticar2@uniandes.edu.co
+      percentage: 25
+    - user: jd.marinb1@uniandes.edu.co
+      percentage: 25
+board: "https://github.com/orgs/MISW-4301-Desarrollo-Apps-en-la-Nube/projects/314/views/1"
+docs: "https://misw-4301-desarrollo-apps-en-la-nube.github.io/202611-grupo12-proyecto/"
+url: "http://aa5f84d48ce6c452d9d05486b7d9b503-7cee93fd98292a44.elb.us-east-1.amazonaws.com"
+cluster_name: "dann-eks-cluster"
+
+users_app:
+  folder: users_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/users-app
+  image_tag: v1.0.0
+  authors:
+    - m.hernandezg234@uniandes.edu.co
+
+posts_app:
+  folder: posts_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/posts-app
+  image_tag: v1.0.0
+  authors:
+    - jd.marinb1@uniandes.edu.co
+
+offers_app:
+  folder: offers_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/offers-app
+  image_tag: v1.0.0
+  authors:
+    - j.buriticar2@uniandes.edu.co
+
+routes_app:
+  folder: routes_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/routes-app
+  image_tag: v1.0.0
+  authors:
+    - ma.quinteror1@uniandes.edu.co
+
+scores_app:
+  folder: scores_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/scores-app
+  image_tag: v1.0.0
+  authors:
+    - m.hernandezg234@uniandes.edu.co
+
+rf004:
+  folder: rf004_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/rf004-app
+  image_tag: v1.0.0
+  authors:
+    - j.buriticar2@uniandes.edu.co
+
+rf003:
+  folder: rf003_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/rf003-app
+  image_tag: v1.0.0
+  authors:
+    - jd.marinb1@uniandes.edu.co
+
+rf005:
+  folder: rf005_app
+  image_name: 095473173548.dkr.ecr.us-east-1.amazonaws.com/rf005-service
+  image_tag: v1.0.0
+
+  authors:
+    - ma.quinteror1@uniandes.edu.co
+
+credit_cards_app:
+  folder: credit_cards_app
+  type: contenedora
+  authors:
+    - m.hernandezg234@uniandes.edu.co
+    - ma.quinteror1@uniandes.edu.co
+
+aws_async_poller:
+  folder: aws-async-poller
+  type: funcion
+  authors:
+    - m.hernandezg234@uniandes.edu.co
+    - ma.quinteror1@uniandes.edu.co

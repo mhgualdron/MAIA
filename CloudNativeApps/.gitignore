@@ -206,27 +206,16 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+# Local newman output
+env*.json
+newman*.txt
 
-*.safetensors
-ast_esc50_production/
+# Terraform State Files
+terraform/terraform.tfstate*
+terraform/.terraform/
+terraform/*.tfvars
 
-# macOS metadata
-.DS_Store
-.!*!.DS_Store
+# Lambda build artifacts
+aws-async-poller/package/
+aws-async-poller/deployment_package.zip
 
-# CloudNativeApps — Terraform
-CloudNativeApps/terraform/terraform.tfstate*
-CloudNativeApps/terraform/.terraform/
-CloudNativeApps/terraform/*.tfvars
-
-# CloudNativeApps — Lambda build artifacts
-CloudNativeApps/aws-async-poller/package/
-CloudNativeApps/aws-async-poller/deployment_package.zip
-
-# CloudNativeApps — Local evaluator output
-CloudNativeApps/env*.json
-CloudNativeApps/newman*.txt
-
-# CloudNativeApps — Jekyll site build
-CloudNativeApps/docs/_site/
-CloudNativeApps/docs/.jekyll-cache/
