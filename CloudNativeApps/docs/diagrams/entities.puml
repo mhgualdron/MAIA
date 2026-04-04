@@ -1,0 +1,54 @@
+@startuml
+entity users {
+  * id : UUID <<PK>>
+  --
+  * username : String (unique)
+  * email : String (unique)
+  * password : String (hashed)
+  * salt : String
+  token : String (nullable)
+  * status : Enum(POR_VERIFICAR, NO_VERIFICADO, VERIFICADO)
+  expireAt : DateTime (nullable)
+  * createdAt : DateTime
+  * updatedAt : DateTime
+  phoneNumber : String (nullable)
+  dni : String (nullable)
+  fullName : String (nullable)
+}
+
+entity posts {
+  * id : UUID <<PK>>
+  --
+  * routeId : String (unique)
+  * userId : String (unique)
+  * expireAt : DateTime
+  * updatedAt : DateTime
+}
+
+entity offers {
+  * id : UUID <<PK>>
+  --
+  * postId : String (unique)
+  * userId : String (unique)
+  * description : String
+  * size : Enum(LARGE, MEDIUM, SMALL)
+  * fragile : Bool
+  * offer : Float
+  * createdAt : DateTime
+}
+
+entity routes {
+  * id : UUID <<PK>>
+  --
+  * flightId : String (unique)
+  * sourceAirportCode : String
+  * sourceCountry : String
+  * destinyAirportCode : String
+  * destinyCountry : String
+  * bagCost : Int
+  * plannedStartDate : DateTime
+  * plannedEndDate : DateTime
+  * createdAt : DateTime
+  * updatedAt : DateTime
+}
+@enduml

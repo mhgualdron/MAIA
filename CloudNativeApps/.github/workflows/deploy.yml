@@ -1,0 +1,61 @@
+name: Build and Deploy to EKS
+
+on:
+  push:
+    branches: [ "FIX" ]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR (Credit Cards)
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: credit-cards-app
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./credit_cards_app
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Build, tag, and push image to Amazon ECR (Users App)
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: users-app
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./users_app
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --name dann-eks-cluster --region us-east-1
+
+    - name: Deploy to EKS
+      run: |
+        # Inyectar credenciales dinámicas de AWS Academy en el manifest
+        sed -i "s|AWS_ACCESS_KEY_ID_PLACEHOLDER|${{ secrets.AWS_ACCESS_KEY_ID }}|g" k8s/credit-cards-app-deployment.yaml
+        sed -i "s|AWS_SECRET_KEY_PLACEHOLDER|${{ secrets.AWS_SECRET_ACCESS_KEY }}|g" k8s/credit-cards-app-deployment.yaml
+        sed -i "s|AWS_SESSION_TOKEN_PLACEHOLDER|${{ secrets.AWS_SESSION_TOKEN }}|g" k8s/credit-cards-app-deployment.yaml
+        
+        # Aplicar manifiestos
+        kubectl apply -f k8s/ --validate=false
+        
+        # Reiniciar para asegurar que tomen las nuevas llaves y la nueva imagen
+        kubectl rollout restart deployment/credit-cards-app
+        kubectl rollout restart deployment/users-app

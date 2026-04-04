@@ -1,0 +1,40 @@
+name: Push to AWS ECR
+on:
+  push:
+    branches:
+      - "*"
+      - "**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push All Images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          for app in rf003_app users_app posts_app routes_app offers_app scores_app rf004_app rf005_app credit_cards_app; do
+            IMAGE_NAME=$(echo $app | tr '_' '-')
+            # Mapping overrides if folder name doesn't match ECR repo
+            if [ "$app" == "scores_app" ]; then IMAGE_NAME="scores-app"; fi
+            if [ "$app" == "rf005_app" ]; then IMAGE_NAME="rf005-service"; fi
+            if [ "$app" == "rf004_app" ]; then IMAGE_NAME="rf004-service"; fi
+            if [ "$app" == "rf003_app" ]; then IMAGE_NAME="rf003-app"; fi
+            docker build -t $ECR_REGISTRY/$IMAGE_NAME:latest ./$app
+            docker push $ECR_REGISTRY/$IMAGE_NAME:latest
+          done

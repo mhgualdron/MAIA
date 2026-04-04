@@ -1,0 +1,44 @@
+@startuml
+node "Minikube" {
+    
+    node "Users Pod" {
+        component users_app
+        component "users-app"
+        component "users-app-service"
+    }
+    database users_db
+    component "users-db"
+    component "users-db-service"
+    artifact "users-db-volumen"
+    
+    node "Posts Pod" {
+        component posts_app
+        component "posts-app"
+        component "posts-app-service"
+    }
+    database posts_db
+    component "posts-db"
+    component "posts-db-service"
+    artifact "posts-db-volumen"
+    
+    node "Offers Pod" {
+        component offers_app
+        component "offers-app"
+        component "offers-app-service"
+    }
+    database offers_db
+    component "offers-db"
+    component "offers-db-service"
+    artifact "offers-db-volumen"
+    
+    node "Routes Pod" {
+        component routes_app
+        component "routes-app"
+        component "routes-app-service"
+    }
+    database routes_db
+    component "routes-db"
+    component "routes-db-service"
+    artifact "routes-db-volumen"
+}
+@enduml

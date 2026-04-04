@@ -1,0 +1,64 @@
+@startuml
+' RF-003: Crear Publicación (Orquestación)
+title RF-003: Crear Publicación (Orquestación)
+
+actor Usuario
+participant "API Gateway" as GW
+participant "RF-003 App\n(Orquestador)" as O
+participant "Users App" as U
+participant "Routes App" as R
+participant "Posts App" as P
+
+Usuario -> GW: POST /rf003/posts
+GW -> O: POST /rf003/posts
+activate O
+
+note right of O: 1. Validar Token (Auth)
+O -> U: GET /users/me
+activate U
+U --> O: 200 {id, ...}
+deactivate U
+
+alt Token inválido / expirado (401)
+    O --> GW: 401 Unauthorized
+    GW --> Usuario: 401 Unauthorized
+else Token ausente (403)
+    O --> GW: 403 Forbidden
+    GW --> Usuario: 403 Forbidden
+end
+
+note right of O: 2. Validar Fechas
+O -> O: Validar plannedStartDate, plannedEndDate, expireAt
+alt Fechas inválidas (412)
+    O --> GW: 412 Precondition Failed
+    GW --> Usuario: 412 Fechas inválidas
+end
+
+note right of O: 3. Obtener o crear ruta
+O -> R: GET /routes?flight={flightId}
+activate R
+R --> O: 200 [{id, ...}] | 404
+O -> R: POST /routes (si no existe)
+R --> O: 201 {id, ...}
+deactivate R
+
+note right of O: 4. Verificar duplicado
+O -> P: GET /posts?userId={id}&routeId={routeId}
+activate P
+P --> O: 200 [] | 200 [post]
+deactivate P
+alt Ya existe publicación (412)
+    O --> GW: 412 Precondition Failed
+    GW --> Usuario: 412 Ya existe publicación
+end
+
+note right of O: 5. Crear publicación
+O -> P: POST /posts
+activate P
+P --> O: 201 {id, ...}
+deactivate P
+
+O --> GW: 201 Created {data, msg}
+deactivate O
+GW --> Usuario: 201 Created
+@enduml

@@ -1,0 +1,70 @@
+@startuml
+title RF-004: Crear Oferta (Orquestación)
+
+actor Usuario
+participant "API Gateway\n(Ingress)" as GW
+participant "RF-004 Service\n(Orquestador)\nhttp://rf004-app-service:80" as O
+participant "Users App\nhttp://users-app-service:80" as U
+participant "Posts App\nhttp://posts-app-service:80" as P
+participant "Offers App\nhttp://offers-app-service:80" as F
+participant "Scores App\nhttp://scores-app-service:80" as S
+
+Usuario -> GW: POST /rf004/posts/{id}/offers\nAuthorization: Bearer <token>
+GW -> O: POST /rf004/posts/{id}/offers
+
+activate O
+
+O -> U: GET /users/me
+activate U
+U --> O: 200 {id, username, ...}
+deactivate U
+
+alt Token inválido / expirado (401)
+    O --> GW: 401 Unauthorized
+    GW --> Usuario: 401 Unauthorized
+else Token ausente (403)
+    O --> GW: 403 Forbidden
+    GW --> Usuario: 403 Forbidden
+end
+
+O -> P: GET /posts/{id}
+activate P
+P --> O: 200 {id, userId, expireAt, ...}
+deactivate P
+
+alt Post no existe (404)
+    O --> GW: 404 Not Found
+    GW --> Usuario: 404 Not Found
+else Post expirado (412)
+    O --> GW: 412 Precondition Failed
+    GW --> Usuario: 412 La publicación ya expiró
+else Usuario es dueño del Post (412)
+    O --> GW: 412 Precondition Failed
+    GW --> Usuario: 412 No puedes ofertar en tu propia publicación
+end
+
+note right of O: Validaciones exitosas — proceder con creación
+
+O -> F: POST /offers\n{postId, userId, description, size, fragile, offer}
+activate F
+F --> O: 201 {id, userId, createdAt}
+deactivate F
+
+alt Error creando oferta (503)
+    O --> GW: 503 Service Unavailable
+    GW --> Usuario: 503 El servicio está temporalmente fuera de servicio
+end
+
+O -> S: POST /scores\n{offerId, postId, offer, size, bagCost}
+activate S
+note right of S: Calcula utilidad =\nmonto - (ocupación * bagCost)
+S --> O: 200 {id, offerId, score}
+deactivate S
+
+note right of O: Score guardado en scores-app (dann_db)
+
+O --> GW: 201 Created\n{"data": {id, userId, createdAt, postId}, "msg": "..."}
+deactivate O
+
+GW --> Usuario: 201 Created
+@enduml

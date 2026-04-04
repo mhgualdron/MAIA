@@ -1,0 +1,41 @@
+@startuml
+frame "AWS VPC" {
+    frame "EKS Cluster" {
+        frame "Default Namespace" {
+            
+            frame "Core Services" {
+                component users_app
+                component "users-app-service"
+                component posts_app
+                component "posts-app-service"
+                component offers_app
+                component "offers-app-service"
+                component routes_app
+                component "routes-app-service"
+                component scores_app
+                component "scores-app-service"
+            }
+            
+            frame "Orchestrators / Features" {
+                component rf003_app
+                component "rf003-app-service"
+                component rf004_app
+                component "rf004-app-service"
+                component rf005_app
+                component "rf005-app-service"
+            }
+        }
+    }
+    
+    frame "Database Layer" {
+        database "Amazon RDS"
+    }
+}
+
+users_app -- "Amazon RDS"
+posts_app -- "Amazon RDS"
+offers_app -- "Amazon RDS"
+routes_app -- "Amazon RDS"
+scores_app -- "Amazon RDS"
+
+@enduml

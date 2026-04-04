@@ -1,0 +1,44 @@
+@startuml
+frame "Default Namespace" {
+    
+    frame "Users Service Layer" {
+        component users_app
+        component "users-app"
+        component "users-app-service"
+        
+        component users_db
+        component "users-db"
+        component "users-db-service"
+    }
+    
+    frame "Posts Service Layer" {
+        component posts_app
+        component "posts-app"
+        component "posts-app-service"
+        
+        component posts_db
+        component "posts-db"
+        component "posts-db-service"
+    }
+    
+    frame "Offers Service Layer" {
+        component offers_app
+        component "offers-app"
+        component "offers-app-service"
+        
+        component offers_db
+        component "offers-db"
+        component "offers-db-service"
+    }
+    
+    frame "Routes Service Layer" {
+        component routes_app
+        component "routes-app"
+        component "routes-app-service"
+        
+        component routes_db
+        component "routes-db"
+        component "routes-db-service"
+    }
+}
+@enduml

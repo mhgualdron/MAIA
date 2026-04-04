@@ -1,0 +1,68 @@
+@startuml
+node "AWS Cloud (EKS Cluster)" {
+    
+    node "Ingress Controller (Nginx)" {
+        component "Ingress Rules"
+    }
+
+    node "Users Pods" {
+        component users_app
+        component "users-app-service"
+    }
+    
+    node "Posts Pods" {
+        component posts_app
+        component "posts-app-service"
+    }
+    
+    node "Offers Pods" {
+        component offers_app
+        component "offers-app-service"
+    }
+    
+    node "Routes Pods" {
+        component routes_app
+        component "routes-app-service"
+    }
+
+    node "Scores Pods" {
+        component scores_app
+        component "scores-app-service"
+    }
+
+    node "RF003 Pods" {
+        component rf003_app
+        component "rf003-app-service"
+    }
+
+    node "RF004 Pods" {
+        component rf004_app
+        component "rf004-app-service"
+    }
+
+    node "RF005 Pods" {
+        component rf005_app
+        component "rf005-app-service"
+    }
+    
+    database "Amazon RDS (PostgreSQL)" {
+        component "dann-db"
+    }
+}
+
+"Ingress Rules" --> "users-app-service"
+"Ingress Rules" --> "posts-app-service"
+"Ingress Rules" --> "offers-app-service"
+"Ingress Rules" --> "routes-app-service"
+"Ingress Rules" --> "scores-app-service"
+"Ingress Rules" --> "rf003-app-service"
+"Ingress Rules" --> "rf004-app-service"
+"Ingress Rules" --> "rf005-app-service"
+
+users_app --> "dann-db"
+posts_app --> "dann-db"
+offers_app --> "dann-db"
+routes_app --> "dann-db"
+scores_app --> "dann-db"
+
+@enduml

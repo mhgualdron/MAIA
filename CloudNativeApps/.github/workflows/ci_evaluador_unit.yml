@@ -1,0 +1,74 @@
+name: Evaluador Pruebas Unitarias
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-users:
+    runs-on: ubuntu-latest
+    name: Verify users_app
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.1.1
+      - name: Run unit tests
+        run: make unittest DIR=users_app
+
+  test-posts:
+    runs-on: ubuntu-latest
+    name: Verify posts_app
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.1.1
+      - name: Run unit tests
+        run: make unittest DIR=posts_app
+
+  test-offers:
+    runs-on: ubuntu-latest
+    name: Verify offers_app
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.1.1
+      - name: Run unit tests
+        run: make unittest DIR=offers_app
+
+  test-routes:
+    runs-on: ubuntu-latest
+    name: Verify routes_app
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.1.1
+      - name: Run unit tests
+        run: make unittest DIR=routes_app

@@ -1,0 +1,50 @@
+@startuml
+title RF-004: Crear Oferta (Orquestación)
+
+actor Usuario
+participant "API Gateway" as GW
+participant "RF-004 App\n(Orquestador)" as O
+participant "Posts App" as P
+participant "Offers App" as F
+participant "Score App" as S
+
+Usuario -> GW: POST /rf004/posts/{id}/offers
+GW -> O: POST /rf004/posts/{id}/offers
+activate O
+
+note right of O: 1. Validar Token (Auth)
+
+O -> P: GET /posts/{id}
+activate P
+P --> O: JSON {id, userId, expireAt, ...}
+deactivate P
+
+alt Post no existe (404)
+    O --> GW: 404 Not Found
+    GW --> Usuario: 404 Not Found
+else Post Expirado (412)
+    O --> GW: 412 Precondition Failed
+    GW --> Usuario: 412 Post Expirado
+else Usuario es dueño del Post (412)
+    O --> GW: 412 Precondition Failed
+    GW --> Usuario: 412 No puedes ofertar en tu post
+end
+
+note right of O: Validaciones Exitosas
+
+O -> F: POST /offers\n{description, value, ...}
+activate F
+F --> O: JSON {id, ...} (Oferta Creada)
+deactivate F
+
+O -> S: POST /scores\n{offerId, ...}
+activate S
+note right of S: Calcular Score basado en reglas
+S --> O: JSON {id, value, ...} (Score Guardado)
+deactivate S
+
+O --> GW: 201 Created\n{offer: {...}, score: {...}}
+deactivate O
+
+GW --> Usuario: 201 Created
+@enduml

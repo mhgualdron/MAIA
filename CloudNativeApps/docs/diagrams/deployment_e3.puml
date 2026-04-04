@@ -1,0 +1,49 @@
+@startuml
+node "AWS Cloud (EKS Cluster & Serverless)" {
+    
+    node "Ingress Controller (Nginx)" {
+        component "Ingress Rules"
+    }
+
+    frame "Microservicios (EKS)" {
+        component users_app
+        component posts_app
+        component offers_app
+        component routes_app
+        component scores_app
+        component rf003_app
+        component rf004_app
+        component rf005_app
+        component credit_cards_app
+        component true_native
+    }
+    
+    database "Amazon RDS (PostgreSQL)" {
+        component "dann-db"
+    }
+
+    queue "AWS SQS" {
+        component "credit_cards_queue"
+    }
+
+    node "AWS Lambda" {
+        component "aws_async_poller"
+    }
+    
+    node "AWS SES" {
+        component "Email Service"
+    }
+}
+
+"Ingress Rules" --> credit_cards_app : /credit-cards
+"Ingress Rules" --> true_native : /native
+
+credit_cards_app --> true_native : POST /native/cards
+credit_cards_app --> "credit_cards_queue" : Publica Evento
+credit_cards_app --> "dann-db" : Guarda POR_VERIFICAR
+
+"aws_async_poller" <-- "credit_cards_queue" : Consume Evento
+"aws_async_poller" --> true_native : Polling GET (max 30s)
+"aws_async_poller" --> "dann-db" : Actualiza APROBADA/RECHAZADA
+"aws_async_poller" --> "Email Service" : Notifica Usuario
+@enduml

@@ -1,0 +1,34 @@
+@startuml rf007_sequence
+actor Actor
+participant "Ingress" as Ingress
+participant "Users Microservice" as Users
+participant "SNS: UserEvents" as SNS
+participant "Lambda: VerificationTrigger" as Lambda1
+participant "TrueNative" as TN
+participant "Lambda: NotificationService" as Lambda2
+participant "AWS SES" as SES
+
+Actor -> Ingress: POST /users (Create User)
+Ingress -> Users: POST /users
+Users -> Users: Create User (status: POR_VERIFICAR)
+Users -> SNS: Publish USER_CREATED Event
+Users -> Actor: 201 Created
+
+SNS -> Lambda1: Trigger (USER_CREATED)
+Lambda1 -> TN: POST /native/verify (transactionId, webhook)
+TN -> Lambda1: 201 Accepted
+
+note over TN: Background Verification (up to 120s)
+
+TN -> Ingress: PATCH /users/verify/callback
+Ingress -> Users: PATCH /users/verify/callback
+Users -> Users: Validate verifyToken (SHA256)
+Users -> Users: Update User Status (VERIFICADO/NO_VERIFICADO)
+Users -> SNS: Publish VERIFICATION_COMPLETED Event
+Users -> TN: 200 OK
+
+SNS -> Lambda2: Trigger (VERIFICATION_COMPLETED)
+Lambda2 -> SES: Send Email Notification
+SES -> Actor: Email Inbox
+
+@enduml

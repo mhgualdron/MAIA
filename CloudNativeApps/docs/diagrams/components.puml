@@ -1,0 +1,43 @@
+@startuml
+
+component users_app {
+  [POST /users] as users_create
+  [PATCH /users/{id}] as users_update
+  [POST /users/auth] as users_login
+  [GET /users/me] as users_me
+  [GET /users/count] as users_count
+  [GET /users/ping] as users_ping
+  [POST /users/reset] as users_reset
+}
+
+component posts_app {
+  [POST /posts] as posts_create
+  [GET /posts?expire={expire}&routeId={routeId}&userId={userId}] as posts_filter
+  [GET /posts/{id}] as posts_get
+  [DELETE /posts/{id}] as posts_delete
+  [GET /posts/count] as posts_count
+  [GET /posts/ping] as posts_ping
+  [POST /posts/reset] as posts_reset
+}
+
+component offers_app {
+  [POST /offers] as offers_create
+  [GET /offers?postId={postId}&userId={userId}] as offers_filter
+  [GET /offers/{id}] as offers_get
+  [DELETE /offers/{id}] as offers_delete
+  [GET /offers/count] as offers_count
+  [GET /offers/ping] as offers_ping
+  [POST /offers/reset] as offers_reset
+}
+
+component routes_app {
+  [POST /routes] as routes_create
+  [GET /routes/{flightId}] as routes_filter
+  [GET /routes/{id}] as routes_get
+  [DELETE /routes/{id}] as routes_delete
+  [GET /routes/count] as routes_count
+  [GET /routes/ping] as routes_ping
+  [POST /routes/reset] as routes_reset
+}
+
+@enduml

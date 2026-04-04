@@ -1,0 +1,7 @@
+remote_theme: just-the-docs/just-the-docs
+title: "DANN Project - Grupo 12"
+description: "Cloud Native Apps - Entrega 1"
+baseurl: ""
+url: "https://super-adventure-yv58poq.pages.github.io"
+aux_links:
+  "GitHub Repository": "https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/202611-grupo12-proyecto"
