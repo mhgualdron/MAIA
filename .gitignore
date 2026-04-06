@@ -230,3 +230,13 @@ CloudNativeApps/newman*.txt
 # CloudNativeApps — Jekyll site build
 CloudNativeApps/docs/_site/
 CloudNativeApps/docs/.jekyll-cache/
+
+
+# Ignore dataset and outputs
+
+NLP/Microproyecto1/dataset/
+NLP/Microproyecto1/outputs/
+NLP/Microproyecto2/dataset/
+NLP/Microproyecto2/outputs/
+NLP/Microproyecto3/dataset/
+NLP/Microproyecto3/outputs/
