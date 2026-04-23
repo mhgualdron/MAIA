@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -c \"import json,sys; nb=json.load\\(sys.stdin\\); cell=nb['cells'][37]; [print\\(o.get\\('text',''\\).join\\(o.get\\('data',{}\\).get\\('text/plain',['']\\)\\) if o['output_type']!='stream' else ''.join\\(o['text']\\)\\) for o in cell.get\\('outputs',[]\\)]\")"
+      "Bash(python -c \"import json,sys; nb=json.load\\(sys.stdin\\); cell=nb['cells'][37]; [print\\(o.get\\('text',''\\).join\\(o.get\\('data',{}\\).get\\('text/plain',['']\\)\\) if o['output_type']!='stream' else ''.join\\(o['text']\\)\\) for o in cell.get\\('outputs',[]\\)]\")",
+      "Bash(python -c \"import json; nb=json.load\\(open\\('Microproyecto2.ipynb'\\)\\); print\\(json.dumps\\(nb.get\\('metadata',{}\\).get\\('widgets',{}\\), indent=2\\)\\)\")",
+      "Bash(python -c ' *)"
     ]
   }
 }
